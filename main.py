@@ -14,13 +14,24 @@ def image2PDF(pdfPath,imagePath):
 
 def pdf2image(pdfPath, imagePath):
     pdfDoc = fitz.open(pdfPath)
+    count = 0
     for pg in range(pdfDoc.pageCount):
         page = pdfDoc[pg]
         rotate = int(0)
 
         #缩放倍数
-        zoom_x = 2.0
-        zoom_y = 2.0
+        if(page.get_image_info()[0]["width"]>4000):
+            zoom_x = 0.25
+            zoom_y = 0.25
+        elif(page.get_image_info()[0]["width"]>3000):
+            zoom_x = 0.5
+            zoom_y = 0.5
+        elif(page.get_image_info()[0]["width"]>2000):
+            zoom_x = 1
+            zoom_y = 1
+        else:
+            zoom_x = 1.5
+            zoom_y = 1.5
         mat = fitz.Matrix(zoom_x, zoom_y).preRotate(rotate)
         pix = page.getPixmap(matrix=mat, alpha=False)
 
@@ -28,13 +39,15 @@ def pdf2image(pdfPath, imagePath):
             os.makedirs(imagePath)          # 若图片文件夹不存在就创建
 
         pix.writePNG(imagePath + '/' + '%s.png' % pg)  # 将图片写入指定的文件夹内
+        count+=1
+        print(count)
 
 
 if __name__ == "__main__":
-    pdfPaths = "C:\\Users\\du\\Desktop\\英语"
+    pdfPaths = "C:\\Users\\du\\Desktop\\圖片pdf"
     imagePath = 'pdfimage'
     for i,pdfPath in enumerate(os.listdir(pdfPaths)):
-        print("[{}/{}] {}".format(i,len(os.listdir(pdfPaths)),pdfPath))
+        print("[{}/{}] {}".format(i+1,len(os.listdir(pdfPaths)),pdfPath))
         pdfPath_out = pdfPaths+"\\"+pdfPath.split(".")[0]+"_imageonly"+".pdf"
         if os.path.exists(imagePath):
             shutil.rmtree(imagePath)
