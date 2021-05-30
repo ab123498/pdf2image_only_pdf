@@ -1,6 +1,5 @@
-import sys, fitz
+import fitz
 import os
-import datetime
 import img2pdf
 import shutil
 
@@ -32,12 +31,13 @@ def pdf2image(pdfPath, imagePath):
 
 
 if __name__ == "__main__":
-    pdfPath = 'A4 瑜伽合一的传统.pdf'
+    pdfPaths = 'A4 瑜伽合一的传统.pdf'
     imagePath = 'pdfimage'
-    pdfPath_out = pdfPath.split(".")[0]+"_imageonly"+".pdf"
-    if os.path.exists(imagePath):
-        shutil.rmtree(imagePath)
-    os.mkdir(imagePath)
-    pyMuPDF_fitz(pdfPath, imagePath)
-    image2PDF(pdfPath_out,imagePath)
+    for pdfPath in os.listdir(pdfPaths):
+        pdfPath_out = pdfPath.split(".")[0]+"_imageonly"+".pdf"
+        if os.path.exists(imagePath):
+            shutil.rmtree(imagePath)
+        os.mkdir(imagePath)
+        pdf2image(pdfPath, imagePath)
+        image2PDF(pdfPath_out,imagePath)
     shutil.rmtree(imagePath)        #清空处理后的图片文件
