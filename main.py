@@ -31,13 +31,15 @@ def pdf2image(pdfPath, imagePath):
 
 
 if __name__ == "__main__":
-    pdfPaths = 'A4 瑜伽合一的传统.pdf'
+    pdfPaths = "C:\\Users\\du\\Desktop\\英语"
     imagePath = 'pdfimage'
-    for pdfPath in os.listdir(pdfPaths):
-        pdfPath_out = pdfPath.split(".")[0]+"_imageonly"+".pdf"
+    for i,pdfPath in enumerate(os.listdir(pdfPaths)):
+        print("[{}/{}] {}".format(i,len(os.listdir(pdfPaths)),pdfPath))
+        pdfPath_out = pdfPaths+"\\"+pdfPath.split(".")[0]+"_imageonly"+".pdf"
         if os.path.exists(imagePath):
             shutil.rmtree(imagePath)
         os.mkdir(imagePath)
-        pdf2image(pdfPath, imagePath)
+        pdf2image(pdfPaths+"\\"+pdfPath, imagePath)
         image2PDF(pdfPath_out,imagePath)
     shutil.rmtree(imagePath)        #清空处理后的图片文件
+    print("恭喜：转换成功！")
